@@ -1,0 +1,91 @@
+/* A ring is a field if its a commutative ring with unity element and every non zero element has a multiplicative inverse.
+
+An integral domain is a commutative ring with a unity element and no zero divisors.
+
+Here I try checking for  Z7 under addition modulo 7 and multiplication modulo 7.*/ 
+
+kill(all)$
+
+Z:[0,1,2,3,4,5,6]$
+n:length(Z)$
+mult(x,y):=mod(x*y,n)$/*multiplication modulo 7*/
+
+
+
+/*checking for commutativity */
+flag:1$
+for i:1 thru n do(
+for j:1 thru n do(
+if mult(Z[i],Z[j]) # mult(Z[j],Z[i]) then
+flag:0
+)
+)$
+if flag=1 then print("Given ring is commutative ")
+else
+print("Given ring is not commutative")$
+
+
+
+/*checking for identity element*/
+
+e:x$ 
+for i:1 thru n do(
+is_ident:true,
+for j:1 thru n do(
+if  Z[j] # mult(Z[i],Z[j]) then 
+is_ident:false),
+if is_ident=true then
+e:Z[i]) $
+
+if e=x then print("unity element doesnt exist")
+else
+print("The unity element exists and it is ",e)$
+
+
+/*checking for inverse*/ 
+/*here I wont include 0 because for the ring to be a field,  its the non zero elements which has to have inverse. */
+
+
+inv:[]$
+/* both i and j start from 2 because Z[1]= 0 which isnt useful at the moment*/
+
+for i:2 thru n do(
+a:Z[i],
+inv_bool=true,
+for j:2 thru n do( 
+if mult(a,Z[j])= e then(
+inv:endcons(Z[j],inv))/*add Z[j] to inv if its inverse of a */
+)
+)$
+print("The list of inverses of element except zero is", inv)$
+if (length(inv) = n-1) and (flag=1) then(
+print("Given ring is an integral field"))/*as every non zero element has an inverse annd the ring is commutative*/
+else
+print("Given ring is not a field")$
+
+
+/*checking for zero divisors*/ 
+u:0$
+for i:2 thru n do(
+for j:2 thru n do(
+if mult(Z[i],Z[j]) =0 then( 
+print("The zero divisors are ", Z[i], " and ", Z[j]),
+u:1
+)))$
+if u=0 then print("There are no zero divisors")$
+
+
+if (flag=1) and (u=0) then print("The ring is an integral domain")
+else 
+print("The ring is not an integral domain")
+$
+
+
+
+
+
+
+
+
+
+
